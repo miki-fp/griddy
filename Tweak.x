@@ -19,6 +19,7 @@ NSUserDefaults *userDefaults;
 CGRect gridWrapperSize;
 BOOL shouldPatchFolderIcon = YES;
 BOOL patchFoldersChecked = NO;
+BOOL helloFolderEnable = NO;
 
 %hook SBIconListModel
 %property (assign, nonatomic) BOOL griddyShouldPatch; 
@@ -322,6 +323,8 @@ BOOL patchFoldersChecked = NO;
 %hook SBFolderIconImageView
 //this patches the animation for opening and closing a folder(the zoom in and out)
 - (CGRect)frameForMiniIconAtIndex:(NSUInteger)arg0  {
+    if (helloFolderEnable) return %orig;
+
     SBFolder *folder = ((SBFolderIcon *)self.icon).folder;
     SBIconListModel *model = folder.firstList;
 
@@ -359,7 +362,7 @@ BOOL patchFoldersChecked = NO;
     //checks for Primal Folders 2 settings, and decides based on this if it should patch the folder icon
     //allows for Primal folders behaviour or Griddy behaviour
     if (!patchFoldersChecked) {
-        NSDictionary *primalFoldersDict = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.ichitaso.primalfolder2.plist"];
+        NSDictionary *primalFoldersDict = [NSDictionary dictionaryWithContentsOfFile:ROOT_PATH_NS(@"/var/mobile/Library/Preferences/com.ichitaso.primalfolder2.plist")];
         if (primalFoldersDict == nil) {
             shouldPatchFolderIcon = YES;
         } else {
@@ -396,6 +399,13 @@ BOOL patchFoldersChecked = NO;
     UIGraphicsBeginImageContextWithOptions(newSize, NO, gridImageRef.scale);
 
     if (UIGraphicsGetCurrentContext() == nil) return %orig;
+
+    int wantFolderGriddy = 0;
+    for(SBIcon *icon in workingModel.icons) {
+        GriddyIconLocationPreferences *prefs = locationPrefs[icon.uniqueIdentifier];
+        wantFolderGriddy += prefs.index;
+    }
+    if(wantFolderGriddy < 1) return %orig;
 
     //draw mini icons for the custom locations
     for(SBIcon *icon in workingModel.icons) {
@@ -505,4 +515,9 @@ BOOL patchFoldersChecked = NO;
     landscapeSavedDict = [userDefaults dictionaryForKey:@"GriddyLandscapeSave"];
     NSString *temp[] = {@"SBIconLocationRoot", @"SBIconLocationDock", @"SBIconLocationFolder", @"SBIconLocationRootWithWidgets", @"SBIconLocationFloatingDockSuggestions"};
     patchLocations = [NSArray arrayWithObjects:temp count:5];
+
+    NSDictionary *plistDict = [NSDictionary dictionaryWithContentsOfFile:ROOT_PATH_NS(@"/var/mobile/Library/Preferences/cn.zqbb.0rzFolder.plist")];
+    if (plistDict){
+        helloFolderEnable = (plistDict[@"wantsEnable"] == nil || [plistDict[@"wantsEnable"] boolValue] == YES) ? YES : NO;
+    }
 }

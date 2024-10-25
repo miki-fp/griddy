@@ -1,5 +1,5 @@
 #include <UIKit/UIKit.h>
-
+#import "rootless.h"
 // stores entries for icons, where key is the uniqueidentifier for the icon and entry is GriddyIconLocationPreferences
 extern NSMutableDictionary *locationPrefs;
 // save for portrait icon locations
