@@ -155,7 +155,8 @@ NSArray *reorderIconListBasedOnCustomIndex(NSArray *iconList, int size) {
         tempDict[key] = [NSNumber numberWithUnsignedLongLong:((GriddyIconLocationPreferences *)locationPrefs[key]).index];
     }
 
-    [[NSUserDefaults standardUserDefaults] setObject:tempDict forKey:((screenOrientation == 0 ? @"GriddyPortraitSave" : @"GriddyLandscapeSave"))];
+    NSUserDefaults *userDefaults = [[NSUserDefaults alloc] initWithSuiteName:@"com.mikifp.griddy"];
+    [userDefaults setObject:tempDict forKey:((screenOrientation == 0 ? @"GriddyPortraitSave" : @"GriddyLandscapeSave"))];
 
     return newList;
 }
