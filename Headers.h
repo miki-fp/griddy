@@ -61,7 +61,7 @@ typedef struct SBIconImageInfo {
 @property (nonatomic,readonly) SBHIconGridSizeClassSizes iconGridSizeClassSizes;  
 @property (assign, nonatomic) BOOL griddyShouldPatch; 
 @property (assign, nonatomic) BOOL griddyNeedsRefreshFolderImage;
-- (struct SBHIconGridSize )gridSizeForGridSizeClass:(NSUInteger)arg0 ;
+- (struct SBHIconGridSize )gridSizeForGridSizeClass:(NSUInteger)arg0;
 @end
 
 @interface SBIcon : NSObject

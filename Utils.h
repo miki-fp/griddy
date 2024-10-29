@@ -1,4 +1,3 @@
-#import <UIKit/UIKit.h>
 #import "Headers.h"
 #import "GriddyIconLocationPreferences.h"
 

@@ -1,10 +1,12 @@
-TARGET := iphone:clang:latest:15.0
+DEBUG = 0
+FINALPACKAGE = 1
+
+TARGET := iphone:clang:16.5:15.0
 INSTALL_TARGET_PROCESSES = SpringBoard
 
 THEOS_PACKAGE_SCHEME = rootless
 
 THEOS_DEVICE_IP = 192.168.1.26
-THEOS_DEVICE_PORT = 22
 
 include $(THEOS)/makefiles/common.mk
 
